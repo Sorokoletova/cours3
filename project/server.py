@@ -37,7 +37,3 @@ def create_app(config_obj):
 
     return app
 
-if __name__ == '__main__':
-    app_config = Config()
-    app = create_app(app_config)
-    app.run()
