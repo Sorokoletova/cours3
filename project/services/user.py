@@ -18,3 +18,10 @@ class UserService:
 
     def delete(self, nid):
         self.dao.delete(nid)
+
+    def update_password(self, data):
+        hash_password = get_hash(data['password'])
+        if users['password'] != hash_password:
+            abort(401, "Нет такого пароля")
+        data["password_1"] = get_hash(data["password"])
+        self.dao.update(data)

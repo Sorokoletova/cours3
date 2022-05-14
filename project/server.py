@@ -1,13 +1,14 @@
-from flask import Flask, app
+from flask import Flask
 from flask_cors import CORS
 from flask_restx import Api
 
-from project.config import Config
+
 from project.setup_db import db
-from project.views import genres_ns
+from project.views.auth import auth_ns
+from project.views.genres import genres_ns
 from project.views.directors import director_ns
 from project.views.movies import movie_ns
-from project.views.users.users import user_ns
+from project.views.users import user_ns
 
 api = Api(
     authorizations={
@@ -18,14 +19,14 @@ api = Api(
 )
 
 # Нужно для работы с фронтендом
-cors = CORS()
+#cors = CORS()
 
 
 def create_app(config_obj):
     app = Flask(__name__)
     app.config.from_object(config_obj)
 
-    cors.init_app(app)
+#    cors.init_app(app)
     db.init_app(app)
     api.init_app(app)
 
@@ -34,6 +35,6 @@ def create_app(config_obj):
     api.add_namespace(director_ns)
     api.add_namespace(movie_ns)
     api.add_namespace(user_ns)
-
+    api.add_namespace(auth_ns)
     return app
 

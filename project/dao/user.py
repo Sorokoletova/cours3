@@ -20,7 +20,4 @@ class UserDAO:
         self.session.query(User).filter(User.id == nid).update(data)
         self.session.commit()
 
-    def delete(self, nid):
-        user = self.session.query(User).filter(User.id == nid).first()
-        self.session.delete(user)
-        self.session.commit()
+

@@ -20,6 +20,7 @@ class BaseConfig:
     PWD_HASH_NAME = 'sha256'
     AlGORITM = 'HS256'
 
+
 class TestingConfig(BaseConfig):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
@@ -30,8 +31,8 @@ class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_DATABASE_URI = "sqlite:///project.db"
 
-class Config(BaseConfig):
-    DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "sqlite:///project.db"
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    JSON_AS_ASCII = False
+# class Config(BaseConfig):
+#     DEBUG = True
+#     SQLALCHEMY_DATABASE_URI = "sqlite:///project.db"
+#     SQLALCHEMY_TRACK_MODIFICATIONS = False
+#     JSON_AS_ASCII = False

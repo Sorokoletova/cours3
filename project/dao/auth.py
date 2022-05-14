@@ -6,12 +6,12 @@ class AuthDAO:
     def __init__(self, session):
         self.session = session
 
-    def get_find_username(self, username):
+    def get_find_username(self, email):
         """Ищем пользователя"""
-        user = self.session.query(User).filter(User.username == username).first()
+        user = self.session.query(User).filter(User.email == email).first()
         data = {
             "username": user.username,
-            "role": user.role,
+            "email": user.email,
             "password": user.password
         }
         return data
