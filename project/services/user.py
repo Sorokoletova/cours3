@@ -1,3 +1,5 @@
+
+
 from project.dao.user import UserDAO
 from project.utils import get_hash
 
@@ -13,15 +15,8 @@ class UserService:
         data["password"] = get_hash(data["password"])
         self.dao.create(data)
 
-    def update(self, data):
-        self.dao.update(data)
+    def update(self, user, name, surname, favorite_genre):
+        self.dao.update(user, name, surname, favorite_genre)
 
-    def delete(self, nid):
-        self.dao.delete(nid)
-
-    def update_password(self, data):
-        hash_password = get_hash(data['password'])
-        if users['password'] != hash_password:
-            abort(401, "Нет такого пароля")
-        data["password_1"] = get_hash(data["password"])
-        self.dao.update(data)
+    def update_password(self, user, password_old, password_new):
+        self.dao.update_password(user, password_old, password_new)

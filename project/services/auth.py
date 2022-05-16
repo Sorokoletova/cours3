@@ -2,7 +2,7 @@ from flask_restx import abort
 
 # from function import get_hash, generate_tokens, decode_tokens
 from project.dao.auth import AuthDAO
-from project.utils import get_hash, generate_tokens
+from project.utils import get_hash, generate_tokens, decode_tokens
 
 
 class AuthService:
@@ -10,7 +10,7 @@ class AuthService:
         self.dao = dao
 
     def auth_login(self, data: dict):
-        """ проверяем пользователя при аутентификации хешируем пвроль и создаем токен """
+        """ Проверяем пользователя при аутентификации хешируем пвроль и создаем токен """
         users = self.dao.get_find_username(data['email'])
         if users is None:
             abort(401, "Нет такого  пользователя")
@@ -20,16 +20,18 @@ class AuthService:
 
         tok_user = generate_tokens(
             {"password": data['password'],
-             "email": users['email']}
+             "email": data['email'],
+             "id": users['id']}
         )
 
         return tok_user
-    #
-    # def get_refresh_token(self, token: dict):
-    #     """ обновляем пару токенов"""
-    #     data = decode_tokens(token['refresh_token'])
-    #     new_token = generate_tokens(
-    #         {"username": data['username'],
-    #          "role": data['role']}
-    #     )
-    #     return new_token
+
+    def get_refresh_token(self, token: dict):
+        """ обновляем пару токенов"""
+        data = decode_tokens(token['refresh_token'])
+        new_token = generate_tokens(
+            {"password": data['password'],
+             "email": data['email'],
+             "id": data['id']}
+        )
+        return new_token

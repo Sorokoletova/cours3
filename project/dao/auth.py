@@ -10,7 +10,7 @@ class AuthDAO:
         """Ищем пользователя"""
         user = self.session.query(User).filter(User.email == email).first()
         data = {
-            "username": user.username,
+            "id": user.id,
             "email": user.email,
             "password": user.password
         }

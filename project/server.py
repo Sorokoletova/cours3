@@ -1,8 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
 from flask_restx import Api
-
-
 from project.setup_db import db
 from project.views.auth import auth_ns
 from project.views.genres import genres_ns

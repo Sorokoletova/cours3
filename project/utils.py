@@ -4,8 +4,10 @@ import json
 from datetime import datetime, timedelta
 
 import jwt
+from flask import request
+from flask_restx import abort
 
-from constants import PWD_HASH_NAME, PWD_HASH_SALT, PWD_HASH_ITERATIONS, SECRET_KEY, AlGORITM
+from constants import PWD_HASH_SALT, PWD_HASH_ITERATIONS, SECRET_KEY, AlGORITM, PWD_HASH_NAME
 
 
 def read_json(filename, encoding="utf-8"):
@@ -34,3 +36,37 @@ def generate_tokens(data):
     tokens_user = {"access_token": access_token, "refresh_token": refresh_token}
 
     return tokens_user, 201
+
+#print(generate_tokens({"password": 'password',
+             # "email": 'email',
+             # "id": 1}))
+
+def decode_tokens(token):
+    """Раскодируем токен"""
+    dec_token = {}
+    try:
+        dec_token = jwt.decode(jwt=token, key=SECRET_KEY, algorithms=[AlGORITM])
+    except Exception as e:
+        print("JWT Decode Exception", e)
+        abort(401)
+
+    return dec_token
+
+#print(decode_tokens("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwYXNzd29yZCI6InBhc3N3b3JkMTEiLCJlbWFpbCI6IlBldHJvdmFLQGluYm94LnJ1IiwiaWQiOjIsImV4cCI6MTY1MjU0NTc3NSwicmVmcmVzaF90b2tlbiI6ZmFsc2V9.JvSpX8St7k2fH13toE171iElaLulMn10QW20rrZ0oKY"))
+
+
+def auth_required(func):
+    """Декоратор проверки на аутентификацию"""
+    def wrapper(*args, **kwargs):
+        if "Authorization" not in request.headers:
+            abort(401)
+
+        token = request.headers["Authorization"].split(" ")[-1]
+        try:
+            jwt.decode(jwt=token, key=SECRET_KEY, algorithms=[AlGORITM])
+        except Exception as e:
+            print("JWT Decode Exception", e)
+            abort(401)
+        return func(*args, **kwargs)
+
+    return wrapper

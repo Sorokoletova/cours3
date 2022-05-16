@@ -1,3 +1,5 @@
+from flask import request
+
 from project.dao.models.director import Director
 
 
@@ -7,6 +9,11 @@ class DirectorDAO:
 
     def get_all(self):
         director_all = self.session.query(Director)
+        args = request.args
+        if 'page' in args:
+            page = int(args.get('page'))
+            directors = director_all.paginate(page, 12, False)
+            return directors.items
         return director_all
 
     def get_id(self, nid):
